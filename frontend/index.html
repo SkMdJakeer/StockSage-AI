@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockSage AI</title>
+    <link rel="stylesheet" href="/frontend/style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">S</div>
+                <div>
+                    <h1>StockSage</h1>
+                    <span>AI Retail Copilot</span>
+                </div>
+            </div>
+
+            <nav>
+                <button class="nav-item active" onclick="showSection('dashboard')">
+                    📊 Dashboard
+                </button>
+
+                <button class="nav-item" onclick="showSection('inventory')">
+                    📦 Inventory
+                </button>
+
+                <button class="nav-item" onclick="showSection('sales')">
+                    📈 Sales Analytics
+                </button>
+
+                <button class="nav-item" onclick="showSection('copilot')">
+                    ✨ AI Copilot
+                </button>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="status">
+                    <span class="status-dot"></span>
+                    System Online
+                </div>
+
+                <div class="powered">
+                    Powered by Gemini
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+
+            <!-- Header -->
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">RETAIL INTELLIGENCE</p>
+                    <h2 id="page-title">Good morning, Manager</h2>
+                    <p class="subtitle">
+                        Here's what needs your attention today.
+                    </p>
+                </div>
+
+                <div class="header-badge">
+                    <span>●</span> Live Data
+                </div>
+            </header>
+
+
+            <!-- Dashboard -->
+            <section id="dashboard" class="section active-section">
+
+                <!-- Metrics -->
+                <div class="metrics-grid">
+
+                    <div class="metric-card">
+                        <div class="metric-icon sales-icon">₹</div>
+                        <div>
+                            <p>Total Sales</p>
+                            <h3 id="total-sales">Loading...</h3>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon inventory-icon">📦</div>
+                        <div>
+                            <p>Inventory Units</p>
+                            <h3 id="inventory-units">Loading...</h3>
+                        </div>
+                    </div>
+
+                    <div class="metric-card danger">
+                        <div class="metric-icon danger-icon">⚠</div>
+                        <div>
+                            <p>Products at Risk</p>
+                            <h3 id="products-risk">Loading...</h3>
+                        </div>
+                    </div>
+
+                    <div class="metric-card warning">
+                        <div class="metric-icon warning-icon">◒</div>
+                        <div>
+                            <p>Overstocked</p>
+                            <h3 id="overstocked">Loading...</h3>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- Copilot Hero -->
+                <div class="copilot-card">
+
+                    <div class="copilot-header">
+                        <div class="ai-icon">✦</div>
+
+                        <div>
+                            <h3>Ask StockSage AI</h3>
+                            <p>
+                                Ask questions about your sales, inventory and products.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="question-box">
+                        <input
+                            id="question-input"
+                            type="text"
+                            placeholder="e.g. What needs my attention today?"
+                            onkeydown="handleEnter(event)"
+                        >
+
+                        <button onclick="askCopilot()">
+                            Ask AI →
+                        </button>
+                    </div>
+
+                    <div class="suggestions">
+                        <button onclick="askSuggested('What needs my attention today?')">
+                            What needs my attention today?
+                        </button>
+
+                        <button onclick="askSuggested('What should I reorder today?')">
+                            What should I reorder today?
+                        </button>
+
+                        <button onclick="askSuggested('Why did headphone sales fall?')">
+                            Why did headphone sales fall?
+                        </button>
+
+                        <button onclick="askSuggested('Did advertising cause the sales decline?')">
+                            Did advertising cause the sales decline?
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <!-- AI Response -->
+                <div id="response-card" class="response-card hidden">
+
+                    <div class="response-title">
+                        <span>✦</span>
+                        StockSage AI Response
+                    </div>
+
+                    <div id="ai-response"></div>
+
+                    <div class="evidence">
+                        <h4>Supporting Data</h4>
+                        <pre id="evidence-data"></pre>
+                    </div>
+
+                </div>
+
+
+                <!-- Attention -->
+                <div class="content-grid">
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div>
+                                <h3>Stock Risk</h3>
+                                <p>Products that may need replenishment</p>
+                            </div>
+
+                            <span class="panel-badge danger-badge">
+                                Attention
+                            </span>
+                        </div>
+
+                        <div id="risk-list" class="list">
+                            Loading...
+                        </div>
+                    </div>
+
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div>
+                                <h3>Sales Changes</h3>
+                                <p>Recent product performance</p>
+                            </div>
+
+                            <span class="panel-badge">
+                                14 days
+                            </span>
+                        </div>
+
+                        <div id="sales-list" class="list">
+                            Loading...
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Inventory -->
+            <section id="inventory" class="section">
+
+                <div class="section-heading">
+                    <p class="eyebrow">INVENTORY INTELLIGENCE</p>
+                    <h2>Inventory Risk</h2>
+                    <p>Identify products that require attention.</p>
+                </div>
+
+                <div class="panel full-panel">
+                    <div id="inventory-table"></div>
+                </div>
+
+            </section>
+
+
+            <!-- Sales -->
+            <section id="sales" class="section">
+
+                <div class="section-heading">
+                    <p class="eyebrow">PERFORMANCE</p>
+                    <h2>Sales Analytics</h2>
+                    <p>Understand recent product sales movements.</p>
+                </div>
+
+                <div class="panel full-panel">
+                    <div id="sales-table"></div>
+                </div>
+
+            </section>
+
+
+            <!-- Copilot -->
+            <section id="copilot" class="section">
+
+                <div class="section-heading">
+                    <p class="eyebrow">GENERATIVE AI</p>
+                    <h2>AI Retail Copilot</h2>
+                    <p>Ask StockSage questions about your business data.</p>
+                </div>
+
+                <div class="copilot-large">
+
+                    <div class="ai-icon large">✦</div>
+
+                    <h2>What would you like to know?</h2>
+
+                    <p>
+                        StockSage AI uses your sales and inventory data
+                        to provide evidence-based answers.
+                    </p>
+
+                    <div class="question-box large-box">
+                        <input
+                            id="question-input-large"
+                            type="text"
+                            placeholder="Ask a retail question..."
+                            onkeydown="handleLargeEnter(event)"
+                        >
+
+                        <button onclick="askLargeCopilot()">
+                            Ask AI →
+                        </button>
+                    </div>
+
+                    <div id="large-response" class="large-response hidden"></div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="/frontend/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+product_id,product_name,category,price,reorder_level
+P001,Wireless Headphones,Electronics,59.99,20
+P002,Bluetooth Speaker,Electronics,39.99,15
+P003,Smart Watch,Electronics,89.99,12
+P004,USB-C Charger,Accessories,19.99,25
+P005,Power Bank,Accessories,29.99,20
+P006,Nike Running Shoes,Footwear,119.99,15
+P007,Adidas Sports Shoes,Footwear,99.99,15
+P008,Blue Denim Jacket,Clothing,79.99,10
+P009,Black Hoodie,Clothing,49.99,12
+P010,White T-Shirt,Clothing,24.99,20
+P011,Backpack,Bags,44.99,15
+P012,Leather Wallet,Accessories,34.99,15
+P013,Sunglasses,Accessories,29.99,20
+P014,Baseball Cap,Clothing,19.99,20
+P015,Formal Shirt,Clothing,54.99,12
+P016,Casual Jeans,Clothing,69.99,12
+P017,Running Shorts,Clothing,34.99,15
+P018,Sports Bottle,Accessories,14.99,25
+P019,Wireless Mouse,Electronics,27.99,20
+P020,Mechanical Keyboard,Electronics,74.99,10
