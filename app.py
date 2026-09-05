@@ -3,19 +3,14 @@ import sys
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 import uvicorn
 
-
 BASE_DIR = Path(__file__).resolve().parent
-
-sys.path.insert(
-    0,
-    str(BASE_DIR)
-)
+sys.path.insert(0, str(BASE_DIR))
 
 from src.database import load_data
 from src.analytics import (
@@ -26,7 +21,6 @@ from src.analytics import (
 )
 from src.copilot import answer_question
 
-
 load_dotenv()
 
 app = FastAPI(
@@ -34,7 +28,6 @@ app = FastAPI(
     description="Retail Sales and Inventory Copilot",
     version="1.0.0",
 )
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -44,21 +37,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Serve CSS and JavaScript referenced by index.html.
 app.mount(
     "/frontend",
     StaticFiles(directory=BASE_DIR / "frontend"),
     name="frontend",
 )
 
-
 DATA = load_data()
 
 
 @app.get("/")
 def home():
-    return FileResponse(
-        BASE_DIR / "frontend" / "index.html"
-    )
+    return FileResponse(BASE_DIR / "frontend" / "index.html")
 
 
 @app.get("/api/metrics")
@@ -69,47 +60,32 @@ def metrics():
 @app.get("/api/stock-risk")
 def stock_risk():
     return {
-        "items": get_stock_risk(DATA)
-        .head(10)
-        .to_dict(orient="records")
+        "items": get_stock_risk(DATA).head(10).to_dict(orient="records")
     }
 
 
 @app.get("/api/overstock")
 def overstock():
     return {
-        "items": get_overstock(DATA)
-        .head(10)
-        .to_dict(orient="records")
+        "items": get_overstock(DATA).head(10).to_dict(orient="records")
     }
 
 
 @app.get("/api/sales-change")
 def sales_change_api():
     return {
-        "items": sales_change(DATA)
-        .head(10)
-        .to_dict(orient="records")
+        "items": sales_change(DATA).head(10).to_dict(orient="records")
     }
 
 
 @app.post("/api/copilot")
 def copilot(payload: dict):
-    question = payload.get(
-        "question",
-        ""
-    ).strip()
+    question = payload.get("question", "").strip()
 
     if not question:
-        return {
-            "answer": "Please enter a question.",
-            "facts": {},
-        }
+        return {"answer": "Please enter a question.", "facts": {}}
 
-    return answer_question(
-        question,
-        DATA,
-    )
+    return answer_question(question, DATA)
 
 
 if __name__ == "__main__":
